@@ -1,0 +1,30 @@
+<div nz-row nzJustify="center" nzAlign="middle" style="min-height: 100vh;">
+    <div nz-col [nzXs]="24" [nzSm]="20" [nzMd]="12" [nzLg]="8">
+        <app-card-auth title="Đăng nhập" subtitle="Truy cập trang tài khoản">
+            <form [formGroup]="form" nz-form (ngSubmit)="submit()">
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="6" nzFor="email" nzRequired>Email</nz-form-label>
+                    <nz-form-control [nzSpan]="18" nzErrorTip="Email không hợp lệ">
+                        <input nz-input id="email" formControlName="email" placeholder="you@example.com" />
+                    </nz-form-control>
+                </nz-form-item>
+
+
+                <nz-form-item>
+                    <nz-form-label [nzSpan]="6" nzFor="password" nzRequired>Mật khẩu</nz-form-label>
+                    <nz-form-control [nzSpan]="18" nzErrorTip="Tối thiểu 6 ký tự">
+                        <input nz-input id="password" type="password" formControlName="password" placeholder="••••••••" />
+                    </nz-form-control>
+                </nz-form-item>
+
+
+                <div class="meta">
+                    <a routerLink="/forgot-password">Quên mật khẩu?</a>
+                </div>
+
+
+                <button nz-button nzType="primary" [disabled]="loading" [nzLoading]="loading" class="w-100">Đăng nhập</button>
+            </form>
+        </app-card-auth>
+    </div>
+</div>
