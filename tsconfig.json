@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "resolveJsonModule": true,
   "compilerOptions": {
+     "skipLibCheck": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

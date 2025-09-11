@@ -114,7 +114,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   [21.028511, 105.804817],
   [21.0305, 105.809],
   [21.033, 105.815],
-  [21.035, 105.820]
+  [21.035, 105.824]
 ];
     const polyline = this.mapSrv.createPolyline(linePoints, '#ff6600', 4);
     polyline.addTo(this.map);
