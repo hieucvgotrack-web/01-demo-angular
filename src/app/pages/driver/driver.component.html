@@ -1,0 +1,198 @@
+<!-- Header area -->
+<div class="driver-page">
+  <div class="topbar">
+    <div class="title">LÁI XE</div>
+    <div class="actions">
+      <button nz-button nzType="default" (click)="openAdd()">
+        <i nz-icon nzType="plus"></i> Thêm mới lái xe
+      </button>
+    </div>
+  </div>
+
+  <!-- Search block -->
+  <nz-card>
+    <form nz-form [formGroup]="searchForm" (ngSubmit)="onSearch()" class="search-form">
+      <div class="row">
+        <div class="col">
+          <input nz-input formControlName="name" placeholder="Tên" />
+        </div>
+        <div class="col">
+          <input nz-input formControlName="licenseNumber" placeholder="Giấy phép lái xe" />
+        </div>
+        <div class="col">
+          <input nz-input formControlName="account" placeholder="Tài khoản" />
+        </div>
+        <div class="col">
+          <nz-select formControlName="status" style="width:100%">
+            <nz-option nzValue="all" nzLabel="Tất cả"></nz-option>
+            <nz-option nzValue="active" nzLabel="Hoạt động"></nz-option>
+            <nz-option nzValue="inactive" nzLabel="Không hoạt động"></nz-option>
+          </nz-select>
+        </div>
+        <div class="col buttons">
+          <button nz-button nzType="primary" (click)="onSearch()">Tìm kiếm</button>
+          <button nz-button (click)="onReset()" style="margin-left:8px">Đặt lại</button>
+        </div>
+      </div>
+    </form>
+  </nz-card>
+
+  <!-- Data table -->
+  <nz-card>
+    <nz-table [nzData]="drivers" nzBordered>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tài khoản</th>
+          <th>Tên</th>
+          <th>Ảnh đại diện</th>
+          <th>Giấy phép lái xe</th>
+          <th>Hạng</th>
+          <th>Trạng thái</th>
+          <th>Ngày cấp phép</th>
+          <th>Ngày hết hạn</th>
+          <th>Điện thoại</th>
+          <th>Địa chỉ</th>
+          <th>Chức năng</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of drivers; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ d.account }}</td>
+          <td>{{ d.name }}</td>
+          <td>
+            <img *ngIf="d.avatar" [src]="d.avatar" class="avatar" />
+            <span *ngIf="!d.avatar">—</span>
+          </td>
+          <td>{{ d.licenseNumber }}</td>
+          <td>{{ d.licenseClass }}</td>
+          <td>
+            <nz-tag [nzColor]="d.status === 'active' ? 'green' : 'default'">{{ d.status }}</nz-tag>
+          </td>
+          <td>{{ d.licenseIssueDate }}</td>
+          <td>{{ d.licenseExpiryDate }}</td>
+          <td>{{ d.phone }}</td>
+          <td>{{ d.address }}</td>
+          <td>
+            <button nz-button nzType="link" (click)="openEdit(d)">Sửa</button>
+            <button nz-button nzType="link" (click)="remove(d)">Xóa</button>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</div>
+
+<!-- Modal add/edit -->
+<nz-modal [(nzVisible)]="visible" nzTitle="{{ editing ? 'Sửa lái xe' : 'Thêm lái xe' }}" (nzOnCancel)="visible=false" [nzFooter]="modalFooter">
+  <form nz-form [formGroup]="form" class="modal-form">
+    <div class="form-row">
+      <div class="left">
+        <nz-form-item>
+          <nz-form-label nzRequired>Tài khoản</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="account" disabled />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label nzRequired>Tên</nz-form-label>
+          <nz-form-control nzErrorTip="Vui lòng nhập tên">
+            <input nz-input formControlName="name" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <div class="two-col">
+          <nz-form-item>
+            <nz-form-label nzRequired>Giấy phép lái xe</nz-form-label>
+            <nz-form-control nzErrorTip="Vui lòng nhập">
+              <input nz-input formControlName="licenseNumber" />
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Hạng</nz-form-label>
+            <nz-form-control>
+              <input nz-input formControlName="licenseClass" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div class="two-col">
+          <nz-form-item>
+            <nz-form-label>Ngày cấp phép</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="licenseIssueDate" style="width:100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label>Ngày hết hạn</nz-form-label>
+            <nz-form-control>
+              <nz-date-picker formControlName="licenseExpiryDate" style="width:100%"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <nz-form-item>
+          <nz-form-label>Địa chỉ</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="address" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Mô tả</nz-form-label>
+          <nz-form-control>
+            <textarea nz-input formControlName="description" rows="3"></textarea>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="right">
+        <nz-form-item>
+          <nz-form-label>Số điện thoại</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="phone" />
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Ảnh đại diện</nz-form-label>
+          <nz-form-control>
+            <nz-upload
+              nzListType="picture-card"
+              [nzBeforeUpload]="handleBeforeUpload"
+              [nzShowUploadList]="false"
+            >
+              <ng-container *ngIf="!avatarPreview">
+                <i nz-icon nzType="upload"></i>
+                <div style="margin-top:8px">Tải lên</div>
+              </ng-container>
+              <img *ngIf="avatarPreview" [src]="avatarPreview" class="avatar-preview" />
+            </nz-upload>
+            <div *ngIf="avatarPreview" style="margin-top:8px">
+              <button nz-button nzType="default" (click)="removeAvatar()">Xoá ảnh</button>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label>Trạng thái</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="status">
+              <nz-option nzValue="active" nzLabel="Hoạt động"></nz-option>
+              <nz-option nzValue="inactive" nzLabel="Không hoạt động"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
+  </form>
+
+  <ng-template #modalFooter>
+    <button nz-button (click)="visible=false">Đóng</button>
+    <button nz-button nzType="primary" [nzLoading]="isSaving" (click)="save()"> {{ editing ? 'Lưu' : 'Thêm' }} </button>
+  </ng-template>
+</nz-modal>

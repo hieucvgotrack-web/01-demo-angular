@@ -6,46 +6,46 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
 
 @Component({
-selector: 'app-login',
-templateUrl: './login.component.html',
-styleUrls: ['./login.component.scss']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
     loading = false;
     form = this.fb.group({
-        email: ['',[Validators.required, Validators.email]],
+        email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         remember: [true]
     });
 
 
     constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router,
-    private msg: NzMessageService
-    ) {}
+        private fb: FormBuilder,
+        private auth: AuthService,
+        private router: Router,
+        private msg: NzMessageService
+    ) { }
 
 
     submit() {
         if (this.form.invalid) {
             this.form.markAllAsTouched();
-        return;
+            return;
         }
         const { email, password, remember } = this.form.value;
         this.loading = true;
         this.auth
-        .login(email!, password!, remember!)
-        .subscribe({
-        next: () => {
-            this.loading = false;
-            this.msg.success('Đăng nhập thành công');
-            this.router.navigateByUrl('/account');
-        },
-        error: (err) => {
-            this.loading = false;
-            this.msg.error(typeof err === 'string' ? err : 'Lỗi đăng nhập');
-        }
-        });
+            .login(email!, password!, remember!)
+            .subscribe({
+                next: () => {
+                    this.loading = false;
+                    this.msg.success('Đăng nhập thành công');
+                    this.router.navigateByUrl('/driver');
+                },
+                error: (err) => {
+                    this.loading = false;
+                    this.msg.error(typeof err === 'string' ? err : 'Lỗi đăng nhập');
+                }
+            });
     }
 }

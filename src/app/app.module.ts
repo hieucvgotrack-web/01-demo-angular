@@ -18,6 +18,13 @@ import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
 import { NzMessageModule } from 'ng-zorro-antd/message';
+import { NzCardModule } from 'ng-zorro-antd/card';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzTagModule } from 'ng-zorro-antd/tag';
+import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
+import { NzUploadModule } from 'ng-zorro-antd/upload';
 
 import { registerLocaleData } from '@angular/common';
 import vi from '@angular/common/locales/vi';
@@ -30,6 +37,7 @@ import { CardAuthComponent } from './shared/ui/card-auth/card-auth.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { AccountComponent } from './pages/account/account.component';
+import { DriverComponent } from './pages/driver/driver.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +45,8 @@ import { AccountComponent } from './pages/account/account.component';
     CardAuthComponent,
     LoginComponent,
     ForgotPasswordComponent,
-    AccountComponent
+    AccountComponent,
+    DriverComponent
   ],
   imports: [
     BrowserModule,
@@ -55,9 +64,18 @@ import { AccountComponent } from './pages/account/account.component';
     NzCheckboxModule,
     NzAlertModule,
     NzTypographyModule,
-    NzMessageModule
+    NzMessageModule,
+    // thêm các module này
+    NzCardModule,
+    NzTableModule,
+    NzSelectModule,
+    NzTagModule,
+    NzModalModule,
+    NzDatePickerModule,
+    NzUploadModule
+
   ],
   providers: [{ provide: NZ_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
