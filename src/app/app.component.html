@@ -1,16 +1,17 @@
 <nz-layout *ngIf="auth.isLoggedIn && !isLoginPage; else onlyContent">
-    <nz-sider nzWidth="220px" class="site-sider" [nzTheme]="'dark'" nzCollapsible>
-        <!-- logo -->
-        <div class="logo">
-            <img src="assets/logo.png" alt="logo" />
-        </div>
+    <nz-sider nzWidth="220px" class="site-sider" [nzTheme]="'light'">
 
         <!-- menu chính -->
-        <nz-menu nzMode="inline" [nzTheme]="'dark'" nzInlineCollapsed="false">
-            <nz-menu-item routerLink="/map" nzIcon="global">Bản đồ</nz-menu-item>
-            <nz-menu-item routerLink="/driver" nzIcon="car">Lái xe</nz-menu-item>
-        </nz-menu>
-
+       <ul nz-menu nzMode="inline" [nzTheme]="'light'" nzInlineCollapsed="false">
+            <li nz-menu-item routerLink="/map">
+                <i nz-icon nzType="global"></i>
+                <span>Bản đồ</span>
+            </li>
+            <li nz-menu-item routerLink="/driver">
+                <i nz-icon nzType="car"></i>
+                <span>Lái xe</span>
+            </li>
+        </ul>
         <!-- phần dưới: user info -->
         <div class="user-info">
             <div class="username">
@@ -24,8 +25,7 @@
     </nz-sider>
 
     <nz-layout>
-        <nz-header class="site-header"></nz-header>
-        <nz-content class="site-content">
+        <nz-content class="site-content" > 
             <router-outlet></router-outlet>
         </nz-content>
     </nz-layout>

@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+html, body, app-root {
+  height: 100%;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+nz-layout {
+  min-height: 100vh;
+}
+
+.site-content {
+  padding: 16px;
+  background: #fff;
+  min-height: calc(100vh - 64px); // subtract header height if present
+}
