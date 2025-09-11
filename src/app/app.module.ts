@@ -25,8 +25,9 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
-
+import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { registerLocaleData } from '@angular/common';
+import { NzMenuModule } from 'ng-zorro-antd/menu';
 import vi from '@angular/common/locales/vi';
 registerLocaleData(vi);
 
@@ -72,8 +73,9 @@ import { DriverComponent } from './pages/driver/driver.component';
     NzTagModule,
     NzModalModule,
     NzDatePickerModule,
-    NzUploadModule
-
+    NzUploadModule,
+    NzLayoutModule,
+    NzMenuModule
   ],
   providers: [{ provide: NZ_I18N, useValue: vi_VN }],
   bootstrap: [AppComponent]
