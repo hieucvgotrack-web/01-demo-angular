@@ -5,13 +5,14 @@ import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password
 import { AuthGuard } from './core/auth/auth.guard';
 import { AccountComponent } from './pages/account/account.component';
 import { DriverComponent } from './pages/driver/driver.component';
+import { MapComponent } from './pages/map/map.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'forgot-password', component: ForgotPasswordComponent },
-  // { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
   { path: 'driver', component: DriverComponent, canActivate: [AuthGuard] },
+  { path: 'map', component: MapComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: 'login' }
 ];
 

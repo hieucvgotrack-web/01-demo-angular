@@ -10,7 +10,9 @@ import { AuthService } from './core/auth/auth.service';
 export class AppComponent {
   isLoginPage = false;
 
-  constructor(private router: Router,private auth: AuthService ) {
+  constructor(
+    private router: Router,
+    private auth: AuthService ) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {

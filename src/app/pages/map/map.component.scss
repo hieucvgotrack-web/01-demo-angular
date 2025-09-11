@@ -1,0 +1,24 @@
+.map-container {
+  width: 100%;
+  height: calc(100vh - 64px); // adjust based on your layout
+}
+
+.map-toolbar {
+  padding: 8px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.custom-cluster div {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color: #fff;
+  font-weight: 600;
+  border: 2px solid rgba(255,255,255,0.6);
+}

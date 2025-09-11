@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -39,6 +38,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
 import { AccountComponent } from './pages/account/account.component';
 import { DriverComponent } from './pages/driver/driver.component';
+import { MapComponent } from './pages/map/map.component';
+import { MapService } from './core/map/map.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { DriverComponent } from './pages/driver/driver.component';
     LoginComponent,
     ForgotPasswordComponent,
     AccountComponent,
-    DriverComponent
+    DriverComponent,
+    MapComponent
   ],
   imports: [
     BrowserModule,
@@ -77,7 +79,7 @@ import { DriverComponent } from './pages/driver/driver.component';
     NzLayoutModule,
     NzMenuModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: vi_VN }],
+  providers: [{ provide: NZ_I18N, useValue: vi_VN }, MapService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
