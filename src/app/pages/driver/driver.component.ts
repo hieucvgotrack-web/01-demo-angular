@@ -5,6 +5,7 @@ import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { finalize } from 'rxjs/operators';
 import { Driver, DriverService } from 'src/app/core/driver/driver.service';
+import { NzUploadFile } from 'ng-zorro-antd/upload';
 
 @Component({
     selector: 'app-driver',
@@ -23,7 +24,6 @@ export class DriverComponent implements OnInit {
     isSaving = false;
     form: FormGroup;
     editing: Driver | null = null;
-    avatarPreview: string | null = null;
 
     constructor(
         private driverSrv: DriverService,
@@ -48,7 +48,6 @@ export class DriverComponent implements OnInit {
             licenseExpiryDate: [null],
             address: [null],
             description: [null],
-            avatar: [null],
             status: ['active']
         });
     }
@@ -79,7 +78,6 @@ export class DriverComponent implements OnInit {
     openAdd() {
         this.editing = null;
         this.form.reset({ account: 'E-TRACK (mygpsapp)', status: 'active' });
-        this.avatarPreview = null;
         this.visible = true;
     }
 
@@ -95,10 +93,8 @@ export class DriverComponent implements OnInit {
             licenseExpiryDate: d.licenseExpiryDate ? new Date(d.licenseExpiryDate) : null,
             address: d.address,
             description: d.description,
-            avatar: d.avatar,
             status: d.status || 'active'
         });
-        this.avatarPreview = d.avatar || null;
         this.visible = true;
     }
 
@@ -122,7 +118,6 @@ export class DriverComponent implements OnInit {
             licenseExpiryDate: raw.licenseExpiryDate ? new Date(raw.licenseExpiryDate).toISOString().slice(0, 10) : undefined,
             address: raw.address,
             description: raw.description,
-            avatar: this.avatarPreview || raw.avatar,
             status: raw.status
         };
 
@@ -155,19 +150,10 @@ export class DriverComponent implements OnInit {
     }
 
     // handle upload: convert to base64 for preview
-    handleBeforeUpload = (file: File): boolean => {
+    handleBeforeUpload = (file: NzUploadFile): boolean => {
+        const f = file as any as File;
         const reader = new FileReader();
-        reader.onload = () => {
-            this.avatarPreview = reader.result as string;
-            this.form.patchValue({ avatar: this.avatarPreview });
-        };
-        reader.readAsDataURL(file);
-        // prevent default upload action (we handle base64)
+        reader.readAsDataURL(f);
         return false;
-    }
-
-    removeAvatar() {
-        this.avatarPreview = null;
-        this.form.patchValue({ avatar: null });
-    }
+    };
 }

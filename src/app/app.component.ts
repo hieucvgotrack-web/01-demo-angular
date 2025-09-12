@@ -12,7 +12,7 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    private auth: AuthService ) {
+    public  auth: AuthService ) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: any) => {

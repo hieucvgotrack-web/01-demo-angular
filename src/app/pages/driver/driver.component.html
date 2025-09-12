@@ -45,7 +45,6 @@
           <th>#</th>
           <th>Tài khoản</th>
           <th>Tên</th>
-          <th>Ảnh đại diện</th>
           <th>Giấy phép lái xe</th>
           <th>Hạng</th>
           <th>Trạng thái</th>
@@ -61,10 +60,6 @@
           <td>{{ i + 1 }}</td>
           <td>{{ d.account }}</td>
           <td>{{ d.name }}</td>
-          <td>
-            <img *ngIf="d.avatar" [src]="d.avatar" class="avatar" />
-            <span *ngIf="!d.avatar">—</span>
-          </td>
           <td>{{ d.licenseNumber }}</td>
           <td>{{ d.licenseClass }}</td>
           <td>
@@ -92,7 +87,7 @@
         <nz-form-item>
           <nz-form-label nzRequired>Tài khoản</nz-form-label>
           <nz-form-control>
-            <input nz-input formControlName="account" disabled />
+            <input nz-input formControlName="account" [disabled]="true"/>
           </nz-form-control>
         </nz-form-item>
 
@@ -112,11 +107,19 @@
           </nz-form-item>
 
           <nz-form-item>
-            <nz-form-label>Hạng</nz-form-label>
-            <nz-form-control>
-              <input nz-input formControlName="licenseClass" />
-            </nz-form-control>
-          </nz-form-item>
+          <nz-form-label>Hạng</nz-form-label>
+          <nz-form-control>
+            <nz-select formControlName="licenseClass" >
+              <nz-option nzValue="A" nzLabel="A"></nz-option>
+              <nz-option nzValue="B" nzLabel="B"></nz-option>
+              <nz-option nzValue="C" nzLabel="C"></nz-option>
+              <nz-option nzValue="D" nzLabel="D"></nz-option>
+              <nz-option nzValue="E" nzLabel="E"></nz-option>
+              <nz-option nzValue="F" nzLabel="F"></nz-option>
+              <nz-option nzValue="G" nzLabel="G"></nz-option>
+            </nz-select>
+          </nz-form-control>
+        </nz-form-item>
         </div>
 
         <div class="two-col">
@@ -155,26 +158,6 @@
           <nz-form-label>Số điện thoại</nz-form-label>
           <nz-form-control>
             <input nz-input formControlName="phone" />
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
-          <nz-form-label>Ảnh đại diện</nz-form-label>
-          <nz-form-control>
-            <nz-upload
-              nzListType="picture-card"
-              [nzBeforeUpload]="handleBeforeUpload"
-              [nzShowUploadList]="false"
-            >
-              <ng-container *ngIf="!avatarPreview">
-                <i nz-icon nzType="upload"></i>
-                <div style="margin-top:8px">Tải lên</div>
-              </ng-container>
-              <img *ngIf="avatarPreview" [src]="avatarPreview" class="avatar-preview" />
-            </nz-upload>
-            <div *ngIf="avatarPreview" style="margin-top:8px">
-              <button nz-button nzType="default" (click)="removeAvatar()">Xoá ảnh</button>
-            </div>
           </nz-form-control>
         </nz-form-item>
 
