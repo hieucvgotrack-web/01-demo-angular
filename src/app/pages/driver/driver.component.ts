@@ -6,6 +6,8 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { finalize } from 'rxjs/operators';
 import { Driver, DriverService } from 'src/app/core/driver/driver.service';
 import { NzUploadFile } from 'ng-zorro-antd/upload';
+import { AuthService } from 'src/app/core/auth/auth.service';
+import { User } from 'src/app/core/models/user';
 
 @Component({
     selector: 'app-driver',
@@ -29,7 +31,8 @@ export class DriverComponent implements OnInit {
         private driverSrv: DriverService,
         private fb: FormBuilder,
         private modal: NzModalService,
-        private msg: NzMessageService
+        private msg: NzMessageService,
+        private auth: AuthService
     ) {
         this.searchForm = this.fb.group({
             name: [''],
@@ -39,7 +42,7 @@ export class DriverComponent implements OnInit {
         });
 
         this.form = this.fb.group({
-            account: [{ value: 'E-TRACK (mygpsapp)', disabled: true }],
+            account: [{ value: this.auth.currentUser?.name, disabled: true }],
             name: [null, [Validators.required]],
             phone: [null],
             licenseNumber: [null, [Validators.required]],

@@ -20,10 +20,7 @@ export class AuthService {
             }
         }
     }
-
-    // -------------------
     // Token quản lý bằng localStorage
-    // -------------------
     private set token(val: string | null) {
         if (val) localStorage.setItem('demo_token', val);
         else localStorage.removeItem('demo_token');
@@ -31,17 +28,14 @@ export class AuthService {
     private get token(): string | null {
         return localStorage.getItem('demo_token');
     }
-
-    // -------------------
     // Check trạng thái đăng nhập
-    // -------------------
     get isLoggedIn(): boolean {
         return !!this.token; // chỉ cần có token là coi như login
     }
-
-    // -------------------
+    get currentUser(): User | null {
+        return this._user$.getValue();
+    }
     // Login demo
-    // -------------------
     login(email: string, password: string, remember = false): Observable<User> {
         if (!email || !password) return throwError(() => 'Thiếu thông tin');
 
@@ -58,19 +52,13 @@ export class AuthService {
             })
         );
     }
-
-    // -------------------
     // Logout
-    // -------------------
     logout(): void {
         this._user$.next(null);
         this.token = null;
         localStorage.removeItem('demo_user');
     }
-
-    // -------------------
     // Quên mật khẩu demo
-    // -------------------
     requestPasswordReset(email: string): Observable<boolean> {
         if (!email) return throwError(() => 'Email không hợp lệ');
         return of(true).pipe(delay(600));
