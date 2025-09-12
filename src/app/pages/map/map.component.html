@@ -1,6 +1,6 @@
 <div class="map-toolbar">
   <label>Base:</label>
-  <select (change)="changeBase($event.target.value)">
+  <select (change)="changeBase($any($event.target).value)">
     <option value="osm">OpenStreetMap</option>
     <option value="stamen">Stamen Toner</option>
     <option value="carto">CartoDB Light</option>

@@ -62,4 +62,48 @@
             gap: 12px;
         }
     }
+    nz-modal .modal-form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    nz-modal .modal-form .form-row {
+        display: flex;
+        gap: 16px;
+    }
+
+    /* Chia layout */
+    nz-modal .modal-form .left {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    nz-modal .modal-form .right {
+        width: 260px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    /* Nhóm 2 cột */
+    nz-modal .modal-form .two-col {
+        display: flex;
+        gap: 16px;
+    }
+
+    nz-modal .modal-form .two-col nz-form-item {
+        flex: 1; /* luôn chia đều chiều rộng */
+    }
+
+    /* Đảm bảo control full width */
+    nz-modal .modal-form nz-form-control,
+    nz-modal .modal-form input[nz-input],
+    nz-modal .modal-form textarea[nz-input],
+    nz-modal .modal-form nz-select,
+    nz-modal .modal-form nz-date-picker {
+    width: 100%;
+    display: block;
+    }
 }
