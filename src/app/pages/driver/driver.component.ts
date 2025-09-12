@@ -80,14 +80,14 @@ export class DriverComponent implements OnInit {
 
     openAdd() {
         this.editing = null;
-        this.form.reset({ account: 'E-TRACK (mygpsapp)', status: 'active' });
+        this.form.reset({ account: this.auth.currentUser?.name, status: 'active' });
         this.visible = true;
     }
 
     openEdit(d: Driver) {
         this.editing = d;
         this.form.patchValue({
-            account: d.account || 'E-TRACK (mygpsapp)',
+            account: d.account || this.auth.currentUser?.name,
             name: d.name,
             phone: d.phone,
             licenseNumber: d.licenseNumber,
