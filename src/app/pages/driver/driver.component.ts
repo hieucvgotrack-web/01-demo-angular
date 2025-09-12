@@ -159,4 +159,12 @@ export class DriverComponent implements OnInit {
         reader.readAsDataURL(f);
         return false;
     };
+    generateLicense() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < 8; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        this.form.patchValue({ licenseNumber: result });
+    }
 }

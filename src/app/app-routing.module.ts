@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'driver', component: DriverComponent, canActivate: [AuthGuard] },
   { path: 'map', component: MapComponent, canActivate: [AuthGuard] },
   { path: 'account', component: AccountComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'map' }
 ];
 
 @NgModule({

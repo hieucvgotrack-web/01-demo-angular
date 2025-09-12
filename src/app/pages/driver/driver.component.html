@@ -81,35 +81,53 @@
 
 <!-- Modal add/edit -->
 <nz-modal [(nzVisible)]="visible" nzTitle="{{ editing ? 'Sửa lái xe' : 'Thêm lái xe' }}" (nzOnCancel)="visible=false" [nzFooter]="modalFooter">
-  <form nz-form [formGroup]="form" class="modal-form">
-    <div class="form-row">
-      <div class="left">
-        <nz-form-item>
-          <nz-form-label nzRequired>Tài khoản</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="account" [disabled]="true"/>
-          </nz-form-control>
-        </nz-form-item>
 
+  <form nz-form [formGroup]="form" class="modal-form" nzLayout="vertical">
+    <nz-form-item>
+      <nz-form-label nzRequired>Tài khoản</nz-form-label>
+      <nz-form-control>
+        <input nz-input formControlName="account" [disabled]="true"/>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div nz-row [nzGutter]="16">
+      <div nz-col nzSpan="12">
         <nz-form-item>
           <nz-form-label nzRequired>Tên</nz-form-label>
           <nz-form-control nzErrorTip="Vui lòng nhập tên">
             <input nz-input formControlName="name" />
           </nz-form-control>
         </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label>Số điện thoại</nz-form-label>
+          <nz-form-control>
+            <input nz-input formControlName="phone" />
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
 
-        <div class="two-col">
-          <nz-form-item>
-            <nz-form-label nzRequired>Giấy phép lái xe</nz-form-label>
-            <nz-form-control nzErrorTip="Vui lòng nhập">
-              <input nz-input formControlName="licenseNumber" />
-            </nz-form-control>
-          </nz-form-item>
-
-          <nz-form-item>
+    <div nz-row [nzGutter]="16">
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <div nz-row nzAlign="middle" style="justify-content: space-between; width: 100%;">
+            <nz-form-label nzRequired style="margin: 0;">Giấy phép lái xe</nz-form-label>
+            <button nz-button nzType="default" nzShape="circle" class="reload-btn" (click)="generateLicense()">
+              <i nz-icon nzType="reload"></i>
+            </button>
+          </div>
+          <nz-form-control nzErrorTip="Vui lòng nhập">
+            <input nz-input formControlName="licenseNumber" />
+          </nz-form-control>
+      </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
           <nz-form-label>Hạng</nz-form-label>
           <nz-form-control>
-            <nz-select formControlName="licenseClass" >
+            <nz-select formControlName="licenseClass">
               <nz-option nzValue="A" nzLabel="A"></nz-option>
               <nz-option nzValue="B" nzLabel="B"></nz-option>
               <nz-option nzValue="C" nzLabel="C"></nz-option>
@@ -120,62 +138,63 @@
             </nz-select>
           </nz-form-control>
         </nz-form-item>
-        </div>
+      </div>
+    </div>
 
-        <div class="two-col">
-          <nz-form-item>
-            <nz-form-label>Ngày cấp phép</nz-form-label>
-            <nz-form-control>
-              <nz-date-picker formControlName="licenseIssueDate" style="width:100%"></nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
+    <div nz-row [nzGutter]="16">
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label>Ngày cấp phép</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker formControlName="licenseIssueDate" style="width:100%"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+      <div nz-col nzSpan="12">
+        <nz-form-item>
+          <nz-form-label>Ngày hết hạn</nz-form-label>
+          <nz-form-control>
+            <nz-date-picker formControlName="licenseExpiryDate" style="width:100%"></nz-date-picker>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+    </div>
 
-          <nz-form-item>
-            <nz-form-label>Ngày hết hạn</nz-form-label>
-            <nz-form-control>
-              <nz-date-picker formControlName="licenseExpiryDate" style="width:100%"></nz-date-picker>
-            </nz-form-control>
-          </nz-form-item>
-        </div>
-
+    <div nz-row [nzGutter]="16">
+      <div nz-col nzSpan="12">
         <nz-form-item>
           <nz-form-label>Địa chỉ</nz-form-label>
           <nz-form-control>
             <input nz-input formControlName="address" />
           </nz-form-control>
         </nz-form-item>
-
+      </div>
+      <div nz-col nzSpan="12">
         <nz-form-item>
           <nz-form-label>Mô tả</nz-form-label>
           <nz-form-control>
-            <textarea nz-input formControlName="description" rows="3"></textarea>
-          </nz-form-control>
-        </nz-form-item>
-      </div>
-
-      <div class="right">
-        <nz-form-item>
-          <nz-form-label>Số điện thoại</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="phone" />
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
-          <nz-form-label>Trạng thái</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="status">
-              <nz-option nzValue="active" nzLabel="Hoạt động"></nz-option>
-              <nz-option nzValue="inactive" nzLabel="Không hoạt động"></nz-option>
-            </nz-select>
+            <input nz-input formControlName="description" />
           </nz-form-control>
         </nz-form-item>
       </div>
     </div>
+
+    <nz-form-item>
+      <nz-form-label>Trạng thái</nz-form-label>
+      <nz-form-control>
+        <nz-select formControlName="status">
+          <nz-option nzValue="active" nzLabel="Hoạt động"></nz-option>
+          <nz-option nzValue="inactive" nzLabel="Không hoạt động"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
   </form>
 
   <ng-template #modalFooter>
     <button nz-button (click)="visible=false">Đóng</button>
-    <button nz-button nzType="primary" [nzLoading]="isSaving" (click)="save()"> {{ editing ? 'Lưu' : 'Thêm' }} </button>
+    <button nz-button nzType="primary" [nzLoading]="isSaving" (click)="save()">
+      {{ editing ? 'Lưu' : 'Thêm' }}
+    </button>
   </ng-template>
 </nz-modal>
