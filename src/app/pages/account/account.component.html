@@ -2,6 +2,7 @@
     <nz-typography>
         <h2 nz-typography>Trang tài khoản</h2>
         <p nz-typography>Xin chào, <strong *ngIf="(user$ | async) as u">{{ u.name }}</strong> 👋</p>
+        <p nz-typography>gmail, <strong *ngIf="(user$ | async) as u">{{ u.email }}</strong> 👋</p>
     </nz-typography>
 
 

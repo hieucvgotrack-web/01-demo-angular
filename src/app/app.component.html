@@ -27,7 +27,7 @@
                 </li> -->
             </ul>
             <ul nz-menu nzMode="inline" [nzTheme]="'light'" [nzInlineCollapsed]="isCollapsed" class="bottom-menu">
-                <li nz-menu-item>
+                <li nz-menu-item routerLink="/account">
                     <i nz-icon nzType="user"></i>
                     <span *ngIf="(user$ | async) as u">{{ u.name }}</span>
                 </li>
