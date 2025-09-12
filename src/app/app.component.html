@@ -25,8 +25,6 @@
                     <i nz-icon nzType="logout"></i>
                     <span> Đăng xuất</span>
                 </li> -->
-            </ul>
-            <ul nz-menu nzMode="inline" [nzTheme]="'light'" [nzInlineCollapsed]="isCollapsed" class="bottom-menu">
                 <li nz-menu-item routerLink="/account">
                     <i nz-icon nzType="user"></i>
                     <span *ngIf="(user$ | async) as u">{{ u.name }}</span>
