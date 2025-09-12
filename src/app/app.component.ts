@@ -9,6 +9,7 @@ import { AuthService } from './core/auth/auth.service';
 })
 export class AppComponent {
   isLoginPage = false;
+  isCollapsed = false;
 
   constructor(
     private router: Router,
@@ -19,9 +20,14 @@ export class AppComponent {
         this.isLoginPage = event.urlAfterRedirects.includes('/login');
       });
   }
-user$ = this.auth.user$;
+  user$ = this.auth.user$;
+
+  toggleSidebar(): void {
+    this.isCollapsed = !this.isCollapsed;
+  }
+
   logout() {
-  this.auth.logout();
-  this.router.navigate(['/login']); // <-- chuyển sang login
-}
+    this.auth.logout();
+    this.router.navigate(['/login']); // <-- chuyển sang login
+  }
 }

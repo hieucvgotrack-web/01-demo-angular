@@ -1,26 +1,41 @@
 <nz-layout *ngIf="auth.isLoggedIn && !isLoginPage; else onlyContent">
-    <nz-sider nzWidth="220px" class="site-sider" [nzTheme]="'light'">
-
-        <!-- menu chính -->
-       <ul nz-menu nzMode="inline" [nzTheme]="'light'" nzInlineCollapsed="false">
-            <li nz-menu-item routerLink="/map">
-                <i nz-icon nzType="global"></i>
-                <span>Bản đồ</span>
-            </li>
-            <li nz-menu-item routerLink="/driver">
-                <i nz-icon nzType="car"></i>
-                <span>Lái xe</span>
-            </li>
-        </ul>
-        <!-- phần dưới: user info -->
-        <div class="user-info">
-            <div class="username">
-                <i nz-icon nzType="user"></i>
-                <strong *ngIf="(user$ | async) as u">{{ u.name }}</strong>
-            </div>
-            <button nz-button nzType="link" (click)="logout()" class="logout-btn">
-                <i nz-icon nzType="logout"></i> Đăng xuất
+    <nz-sider  nzWidth="220px" class="site-sider" [nzTheme]="'light'" [nzTrigger]="null" [nzCollapsed]="isCollapsed" [nzCollapsedWidth]="80">
+        <!-- Nút toggle -->
+        <div class="sider-toggle-btn">
+            <button nz-button nzType="text" (click)="toggleSidebar()">
+                <i nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
             </button>
+        </div>
+        <!-- menu chính -->
+         <div class="sider-menu-container">
+        <ul nz-menu nzMode="inline" [nzTheme]="'light'" nzInlineCollapsed="false">
+                <li nz-menu-item routerLink="/map">
+                    <i nz-icon nzType="global"></i>
+                    <span>Bản đồ</span>
+                </li>
+                <li nz-menu-item routerLink="/driver">
+                    <i nz-icon nzType="car"></i>
+                    <span>Lái xe</span>
+                </li>
+                <!-- <li nz-menu-item >
+                    <i nz-icon nzType="user"></i>
+                    <span *ngIf="(user$ | async) as u">{{ u.name }}</span>
+                </li>
+                <li nz-menu-item nzType="link" (click)="logout()" class="logout-btn">
+                    <i nz-icon nzType="logout"></i>
+                    <span> Đăng xuất</span>
+                </li> -->
+            </ul>
+            <ul nz-menu nzMode="inline" [nzTheme]="'light'" [nzInlineCollapsed]="isCollapsed" class="bottom-menu">
+                <li nz-menu-item>
+                    <i nz-icon nzType="user"></i>
+                    <span *ngIf="(user$ | async) as u">{{ u.name }}</span>
+                </li>
+                <li nz-menu-item nzType="link" (click)="logout()" class="logout-btn">
+                    <i nz-icon nzType="logout"></i>
+                    <span> Đăng xuất</span>
+                </li>
+            </ul>
         </div>
     </nz-sider>
 
