@@ -21,7 +21,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   private stepCount = 0;
   private moveTimer: any;
   private stopTimer: any;
-  private markerIndex = 1;
+  private markerIndex = 0;
   routePoints: L.LatLngExpression[] = [
     [21.028511, 105.804817],
     [21.030000, 105.810000],
@@ -30,6 +30,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     [21.038000, 105.825000],
   ];
 
+ selectedMarker: { status?: string, title?: string, info?: string, lat: number, lng: number } | null = null;
   constructor(private mapSrv: MapService) {}
   selectedBase: 'osm'|'stamen'|'carto'|'google' = 'osm';
   ngAfterViewInit(): void {
@@ -75,9 +76,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
   // add single marker
   addMarker(latlng: L.LatLngExpression, title = '', info = '') {
-    const marker = L.marker(latlng, { title });
+    const marker = L.marker(latlng, { title, icon: this.getMarkerIcon('green') });
     marker.bindPopup(`<b>${title}</b><br>${info}`, { offset: [0, -10] });
-
+    marker.on('click', () => {
+      const { lat, lng } = marker.getLatLng();
+      this.selectedMarker = { title, info, lat, lng };
+    });
     // show popup on hover (open on mouseover, close on mouseout)
     marker.on('mouseover', () => { marker.openPopup(); });
     marker.on('mouseout', () => { marker.closePopup(); });
@@ -159,7 +163,11 @@ startMovingMarker() {
     this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang di chuyển"));
     this.movingMarker.on('mouseover', () => this.movingMarker.openPopup());
     this.movingMarker.on('mouseout', () => this.movingMarker.closePopup());
-
+    this.markerIndex++;
+    this.movingMarker.on('click', () => {
+      const { lat, lng } = this.movingMarker.getLatLng();
+      this.selectedMarker = { title: `Demo ${this.markerIndex}`, info: `Marker động demo ${this.markerIndex}`, status: (this.movingMarker.options as any).status, lat, lng };
+    });
     this.moveTimer = setInterval(() => this.moveMarkerStep(), 5000);
   }
 
@@ -179,7 +187,8 @@ startMovingMarker() {
     const newLatLng = L.latLng(oldLatLng.lat + latOffset, oldLatLng.lng + lngOffset);
 
     this.movingMarker.setLatLng(newLatLng);
-    this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang di chuyển"));
+    (this.movingMarker.options as any).status = "Đang di chuyển";
+    this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, (this.movingMarker.options as any).status));
 
     const dist = oldLatLng.distanceTo(newLatLng);
     let color = 'green';
@@ -196,11 +205,13 @@ startMovingMarker() {
     if (this.stepCount % 5 === 0) {
       clearInterval(this.moveTimer);
       this.movingMarker.setIcon(this.getMarkerIcon('yellow'));
-      this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang dừng"));
+      (this.movingMarker.options as any).status = "Đang dừng";
+      this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, (this.movingMarker.options as any).status));
 
       this.stopTimer = setTimeout(() => {
         this.movingMarker.setIcon(this.getMarkerIcon('green'));
-        this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang di chuyển"));
+        (this.movingMarker.options as any).status = "Đang di chuyển";
+        this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex,(this.movingMarker.options as any).status));
         this.moveTimer = setInterval(() => this.moveMarkerStep(), 5000);
       }, 15000);
     }

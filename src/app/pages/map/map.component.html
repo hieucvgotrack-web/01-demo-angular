@@ -12,5 +12,16 @@
   <button nz-button nzType="dashed" (click)="generateClusterDemo(1000)">Cluster 1000</button>
   <button nz-button nzType="primary" (click)="startMovingMarker()">Start Moving Marker</button>
 </div>
+<div class="map-wrapper">
+  <!-- Map -->
+  <div id="map" class="map-container"></div>
 
-<div id="map" class="map-container"></div>
+  <!-- Panel thông tin marker -->
+  <div class="marker-info" *ngIf="selectedMarker">
+    <h3>{{ selectedMarker.title }}</h3>
+    <p><b>Trạng thái:</b> {{ selectedMarker.status || 'Đang dừng' }}</p>
+    <p><b>Thông tin:</b> {{ selectedMarker.info || ' không có thông tín'}}</p>
+    <p><b>Tọa độ:</b> {{ selectedMarker.lat | number:'1.6-6' }}, {{ selectedMarker.lng | number:'1.6-6' }}</p>
+    <button nz-button nzType="default" (click)="selectedMarker = null">Đóng</button>
+  </div>
+</div>
