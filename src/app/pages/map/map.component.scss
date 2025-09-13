@@ -25,7 +25,15 @@
 .map-wrapper {
   position: relative;
 }
-
+.marker-info .action-icon {
+  margin-left: 8px;
+  cursor: pointer;
+  color: #1890ff;
+  transition: color 0.2s;
+}
+.marker-info .action-icon:hover {
+  color: #ff4d4f;
+}
 .marker-info {
   position: absolute;
   top: 16px;  

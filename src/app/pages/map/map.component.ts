@@ -159,11 +159,11 @@ startMovingMarker() {
     this.movingMarker = L.marker(center, {
       icon: this.getMarkerIcon('green')
     }).addTo(this.map);
+    this.markerIndex++;
 
     this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang di chuyển"));
     this.movingMarker.on('mouseover', () => this.movingMarker.openPopup());
     this.movingMarker.on('mouseout', () => this.movingMarker.closePopup());
-    this.markerIndex++;
     this.movingMarker.on('click', () => {
       const { lat, lng } = this.movingMarker.getLatLng();
       this.selectedMarker = { title: `Demo ${this.markerIndex}`, info: `Marker động demo ${this.markerIndex}`, status: (this.movingMarker.options as any).status, lat, lng };
@@ -223,7 +223,7 @@ startMovingMarker() {
   }
   // Đổi Icon marker và đổi màu Icon marker theo trạng thái
   getMarkerIcon(color: 'green' | 'yellow') {
-  const carSvg = `
+  const carSvg = ` 
     <svg viewBox="64 64 896 896" focusable="false" width="20" height="20" fill="${color}" xmlns="http://www.w3.org/2000/svg">
       <path d="M959 413c0-17-12-32-29-35l-79-16-58-141a32 32 0 0 0-30-20H271a32 32 0 0 0-30 20l-58 141-79 16c-17 3-29 18-29 35v78c0 18 14 32 32 32h32v200c0 35 29 64 64 64h64c35 0 64-29 64-64V672h384v19c0 35 29 64 64 64h64c35 0 64-29 64-64V523h32c18 0 32-14 32-32v-78zM304 664c0 18-14 32-32 32s-32-14-32-32v-64c0-18 14-32 32-32s32 14 32 32v64zm480 0c0 18-14 32-32 32s-32-14-32-32v-64c0-18 14-32 32-32s32 14 32 32v64z"/>
     </svg>
@@ -235,5 +235,20 @@ startMovingMarker() {
     iconAnchor: [12, 12]
   });
 }
-
+copyToClipboard(lat: number, lng: number) {
+  const coords = `${lat}, ${lng}`;
+  navigator.clipboard.writeText(coords).then(() => {
+    console.log('Đã copy:', coords);
+  }).catch(err => {
+    console.error('Lỗi copy:', err);
+  });
 }
+
+openInGoogleMaps(lat: number, lng: number) {
+  const url = `https://www.google.com/maps?q=${lat},${lng}`;
+  window.open(url, '_blank');
+}
+}
+  // <svg viewBox="64 64 896 896" focusable="false" width="20" height="20" fill="${color}" xmlns="http://www.w3.org/2000/svg">
+  //     <path d="M959 413c0-17-12-32-29-35l-79-16-58-141a32 32 0 0 0-30-20H271a32 32 0 0 0-30 20l-58 141-79 16c-17 3-29 18-29 35v78c0 18 14 32 32 32h32v200c0 35 29 64 64 64h64c35 0 64-29 64-64V672h384v19c0 35 29 64 64 64h64c35 0 64-29 64-64V523h32c18 0 32-14 32-32v-78zM304 664c0 18-14 32-32 32s-32-14-32-32v-64c0-18 14-32 32-32s32 14 32 32v64zm480 0c0 18-14 32-32 32s-32-14-32-32v-64c0-18 14-32 32-32s32 14 32 32v64z"/>
+  //   </svg>

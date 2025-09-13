@@ -21,7 +21,24 @@
     <h3>{{ selectedMarker.title }}</h3>
     <p><b>Trạng thái:</b> {{ selectedMarker.status || 'Đang dừng' }}</p>
     <p><b>Thông tin:</b> {{ selectedMarker.info || ' không có thông tín'}}</p>
-    <p><b>Tọa độ:</b> {{ selectedMarker.lat | number:'1.6-6' }}, {{ selectedMarker.lng | number:'1.6-6' }}</p>
+    <p><b>Tọa độ:</b> {{ selectedMarker.lat | number:'1.6-6' }}, {{ selectedMarker.lng | number:'1.6-6' }} 
+      <b nz-icon
+        nzType="copy"
+        nzTheme="outline"
+        nz-tooltip
+        nzTooltipTitle="Copy"
+        class="action-icon"
+        (click)="copyToClipboard(selectedMarker.lat, selectedMarker.lng)">
+      </b>
+      <b nz-icon
+        nzType="environment"
+        nzTheme="outline"
+        nz-tooltip
+        nzTooltipTitle="Đường đi"
+        class="action-icon"
+        (click)="openInGoogleMaps(selectedMarker.lat, selectedMarker.lng)">
+      </b>
+    </p>
     <button nz-button nzType="default" (click)="selectedMarker = null">Đóng</button>
   </div>
 </div>
