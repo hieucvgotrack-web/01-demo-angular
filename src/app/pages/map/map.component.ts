@@ -12,13 +12,18 @@ import { MapService } from 'src/app/core/map/map.service';
 export class MapComponent implements AfterViewInit, OnDestroy {
   private map!: L.Map;
   private baseLayer!: L.TileLayer;
-  private markerLayer!: any; // MarkerClusterGroup
+  private markerLayer!: any;
   private markers: L.Marker[] = [];
   private currentMarkers: L.Marker[] = [];
 
-  // demo route points (you can update via UI)
+  private movingMarker!: L.Marker;
+  private routePolyline: L.Polyline[] = [];
+  private stepCount = 0;
+  private moveTimer: any;
+  private stopTimer: any;
+  private markerIndex = 1;
   routePoints: L.LatLngExpression[] = [
-    [21.028511, 105.804817], // Hanoi
+    [21.028511, 105.804817],
     [21.030000, 105.810000],
     [21.032000, 105.815000],
     [21.035000, 105.820000],
@@ -26,7 +31,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   ];
 
   constructor(private mapSrv: MapService) {}
-
+  selectedBase: 'osm'|'stamen'|'carto'|'google' = 'osm';
   ngAfterViewInit(): void {
     this.initMap();
   }
@@ -36,13 +41,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
   }
 
   initMap() {
+
+    const savedBase = (localStorage.getItem('selectedMap') as 'osm'|'stamen'|'carto'|'google') || 'osm';
+    this.selectedBase = savedBase;
     this.map = L.map('map', { center: [21.028511, 105.804817], zoom: 13 });
+    this.baseLayer = this.mapSrv.getTileLayer(savedBase).addTo(this.map);
 
-    // default layer = OSM
-    this.baseLayer = this.mapSrv.getTileLayer('osm').addTo(this.map);
-
-    // marker cluster group
-    // @ts-ignore: markercluster types not installed
     this.markerLayer = (L as any).markerClusterGroup({
       spiderfyOnMaxZoom: true,
       showCoverageOnHover: false,
@@ -51,15 +55,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
     this.map.addLayer(this.markerLayer);
 
-    // initial markers (2 points)
-    this.addMarker([21.028511, 105.804817], 'Hanoi - A', 'Marker A info');
-    this.addMarker([21.035000, 105.820000], 'Hanoi - B', 'Marker B info');
+    this.addMarker([21.028511, 105.804817], 'Hanoi 1', 'Marker 1 info');
+    this.addMarker([21.035000, 105.820000], 'Hanoi 2', 'Marker 2 info');
 
-    // draw demo polyline & polygon
     this.demoGeofence();
 
-    // demo cluster 1000
-    // don't create automatically for performance — provide method to demo
+
   }
 
   // change base layer
@@ -67,6 +68,9 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     if (this.baseLayer) this.map.removeLayer(this.baseLayer);
     this.baseLayer = this.mapSrv.getTileLayer(key);
     this.map.addLayer(this.baseLayer);
+
+    this.selectedBase = key; 
+    localStorage.setItem('selectedMap', key); 
   }
 
   // add single marker
@@ -82,32 +86,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.currentMarkers.push(marker);
     return marker;
   }
-
-  // update markers along route: simulate moving update points sequentially
-  // points: list of latlng; interval ms between updates
-  playRoute(points: L.LatLngExpression[], interval = 800) {
-    // remove old "route" markers
-    this.currentMarkers.forEach(m => this.markerLayer.removeLayer(m));
-    this.currentMarkers = [];
-
-    let idx = 0;
-    const timer = setInterval(() => {
-      if (idx >= points.length) {
-        clearInterval(timer);
-        return;
-      }
-      const p = points[idx];
-      const m = L.marker(p, { title: `pt-${idx+1}` });
-      m.bindPopup(`Point ${idx+1}`);
-      m.on('mouseover', () => m.openPopup());
-      m.on('mouseout', () => m.closePopup());
-      this.markerLayer.addLayer(m);
-      this.currentMarkers.push(m);
-      idx++;
-    }, interval);
-  }
-
-  // draw polyline & polygon demo
   demoGeofence() {
     // polyline
   const linePoints: L.LatLngTuple[] = [
@@ -170,4 +148,81 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     this.markerLayer.clearLayers();
     this.currentMarkers = [];
   }
+
+// Khởi động marker động
+startMovingMarker() {
+    const center = this.map.getCenter();
+    this.movingMarker = L.marker(center, {
+      icon: this.getMarkerIcon('green')
+    }).addTo(this.map);
+
+    this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang di chuyển"));
+    this.movingMarker.on('mouseover', () => this.movingMarker.openPopup());
+    this.movingMarker.on('mouseout', () => this.movingMarker.closePopup());
+
+    this.moveTimer = setInterval(() => this.moveMarkerStep(), 5000);
+  }
+
+
+  randomOffset(maxMeters = 500): [number, number] {
+    const dx = (Math.random() - 0.5) * 2 * maxMeters;
+    const dy = (Math.random() - 0.5) * 2 * maxMeters;
+    const latOffset = dy / 111320;
+    const lngOffset = dx / (111320 * Math.cos(this.map.getCenter().lat * Math.PI / 180));
+    return [latOffset, lngOffset];
+  }
+
+  moveMarkerStep() {
+    if (!this.movingMarker) return;
+    const oldLatLng = this.movingMarker.getLatLng();
+    const [latOffset, lngOffset] = this.randomOffset(500);
+    const newLatLng = L.latLng(oldLatLng.lat + latOffset, oldLatLng.lng + lngOffset);
+
+    this.movingMarker.setLatLng(newLatLng);
+    this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang di chuyển"));
+
+    const dist = oldLatLng.distanceTo(newLatLng);
+    let color = 'green';
+    if (dist < 100) color = '#ff0000';
+    else if (dist < 200) color = '#ff6666';
+    else if (dist < 300) color = '#ffcc00';
+    else if (dist < 400) color = '#d4fc76ff';
+    else color = '#00cc00';
+
+    const pl = L.polyline([oldLatLng, newLatLng], { color, weight: 4 }).addTo(this.map);
+    this.routePolyline.push(pl);
+
+    this.stepCount++;
+    if (this.stepCount % 5 === 0) {
+      clearInterval(this.moveTimer);
+      this.movingMarker.setIcon(this.getMarkerIcon('yellow'));
+      this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang dừng"));
+
+      this.stopTimer = setTimeout(() => {
+        this.movingMarker.setIcon(this.getMarkerIcon('green'));
+        this.movingMarker.bindPopup(this.getMarkerPopupContent(this.markerIndex, "Đang di chuyển"));
+        this.moveTimer = setInterval(() => this.moveMarkerStep(), 5000);
+      }, 15000);
+    }
+  }
+
+// hover content
+  private getMarkerPopupContent(index: number, status: string): string {
+    return `<b>Demo ${index}</b><br>Trạng thái: ${status}`;
+  }
+  // Đổi Icon marker và đổi màu Icon marker theo trạng thái
+  getMarkerIcon(color: 'green' | 'yellow') {
+  const carSvg = `
+    <svg viewBox="64 64 896 896" focusable="false" width="20" height="20" fill="${color}" xmlns="http://www.w3.org/2000/svg">
+      <path d="M959 413c0-17-12-32-29-35l-79-16-58-141a32 32 0 0 0-30-20H271a32 32 0 0 0-30 20l-58 141-79 16c-17 3-29 18-29 35v78c0 18 14 32 32 32h32v200c0 35 29 64 64 64h64c35 0 64-29 64-64V672h384v19c0 35 29 64 64 64h64c35 0 64-29 64-64V523h32c18 0 32-14 32-32v-78zM304 664c0 18-14 32-32 32s-32-14-32-32v-64c0-18 14-32 32-32s32 14 32 32v64zm480 0c0 18-14 32-32 32s-32-14-32-32v-64c0-18 14-32 32-32s32 14 32 32v64z"/>
+    </svg>
+  `;
+  return L.divIcon({
+    className: 'custom-marker',
+    html: carSvg,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12]
+  });
+}
+
 }

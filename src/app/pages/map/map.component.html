@@ -1,6 +1,6 @@
 <div class="map-toolbar">
   <label>Base:</label>
-  <select (change)="changeBase($any($event.target).value)">
+  <select [value]="selectedBase" (change)="changeBase($any($event.target).value)">
     <option value="osm">OpenStreetMap</option>
     <option value="stamen">Stamen Toner</option>
     <option value="carto">CartoDB Light</option>
@@ -8,9 +8,9 @@
   </select>
 
   <button nz-button nzType="default" (click)="addMarker([21.04,105.83],'New','New marker')">Add Marker</button>
-  <button nz-button nzType="primary" (click)="playRoute(routePoints, 500)">Play Route</button>
   <button nz-button nzType="default" (click)="clearMarkers()">Clear</button>
   <button nz-button nzType="dashed" (click)="generateClusterDemo(1000)">Cluster 1000</button>
+  <button nz-button nzType="primary" (click)="startMovingMarker()">Start Moving Marker</button>
 </div>
 
 <div id="map" class="map-container"></div>
